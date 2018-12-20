@@ -1,0 +1,137 @@
+fastlane_version "2.50.0"
+REQUIRED_XCODE_VERSION = "10.1"
+default_platform :ios
+
+PROJECT_NAME = "BuildTracker"
+OUTPUT_DIR = "./build"
+
+PRODUCTION_SCHEME = "BuildTracker"
+PRODUCTION_IDENTIFIER = "co.whitesmith.BuildTracker"
+PRODUCTION_IPA_PATH = "#{OUTPUT_DIR}/#{PRODUCTION_SCHEME}.ipa"
+PRODUCTION_DSYM_PATH = "#{OUTPUT_DIR}/#{PRODUCTION_SCHEME}.app.dSYM.zip"
+
+BETA_SCHEME = "BuildTracker-beta"
+BETA_IDENTIFIER = "co.whitesmith.BuildTracker-beta"
+BETA_IPA_PATH = "#{OUTPUT_DIR}/#{BETA_SCHEME}.ipa"
+BETA_DSYM_PATH = "#{OUTPUT_DIR}/#{BETA_SCHEME}.app.dSYM.zip"
+
+HOCKEY_TOKEN = ""
+
+platform :ios do
+
+  lane :bump_build_number_with_current_date do |options|
+    # Set build number to current date and time
+    build_number = Time.new.strftime("%Y.%m.%d.%H.%M")
+    ENV["BUILD_NUMBER"] = build_number
+    increment_build_number_in_plist(
+      xcodeproj: './BuildTracker.xcodeproj',
+      target: PRODUCTION_SCHEME,
+      build_number: build_number,
+    )
+  end
+
+  lane :bump_version do |options|
+    ensure_git_status_clean(show_uncommitted_changes: true)
+    version_number = increment_version_number_in_plist(
+      xcodeproj: './BuildTracker.xcodeproj',
+      target: PRODUCTION_SCHEME,
+      bump_type: 'minor',
+    )
+    build_number = Time.new.strftime("%Y.%m.%d.%H.%M")
+    increment_build_number_in_plist(
+      xcodeproj: './BuildTracker.xcodeproj',
+      target: PRODUCTION_SCHEME,
+      build_number: build_number,
+    )
+
+    puts "Bump to v" + version_number + " (" + build_number + ")"
+    git_commit(path: [
+      "./BuildTracker.xcodeproj/project.pbxproj",
+      "./BuildTracker/Info.plist",
+    ], message: "Bump to v" + version_number + " (" + build_number + ")")
+  end
+
+  lane :beta_build do |options|
+    bump_build_number_with_current_date()
+    gym(
+      scheme: BETA_SCHEME, 
+      export_method: "ad-hoc", 
+      include_bitcode: false,
+      output_directory: OUTPUT_DIR,
+    )
+  end
+
+  lane :build_appstore do |options|
+    bump_build_number_with_current_date()
+    gym(
+      scheme: PRODUCTION_SCHEME, 
+      export_method: "app-store", 
+      include_bitcode: true,
+      output_directory: OUTPUT_DIR,
+    )
+  end
+
+  lane :beta_upload_latest_to_hockey do |options|
+    commit = last_git_commit
+
+    notes = commit[:message]
+    if options[:notes]
+      notes = options[:notes]
+    end
+
+    notify_testers = "0" #Do not notify
+    if options[:notify]
+      notify_testers = "1"
+    end
+
+    # Hockey
+    hockey(
+      api_token: HOCKEY_TOKEN,
+      ipa: BETA_IPA_PATH,
+      dsym: BETA_DSYM_PATH,
+      notify: notify_testers,
+      release_type: "0", #Beta
+      status: "2", #Available for download
+      notes_type: "0", #Textile
+      commit_sha: commit[:commit_hash],
+      repository_url: "https://github.com/whitesmith/BuildTracker",
+      build_server_url: "https://www.whitesmith.co",
+      notes: "Latest change: " + notes
+    )
+
+    hockey_public_url = lane_context[SharedValues::HOCKEY_DOWNLOAD_LINK]
+    puts "#{PROJECT_NAME} uploaded successfully: Hockey Public URL is " + hockey_public_url
+  end
+
+  lane :upload_latest_to_appstore do |options|
+    pilot(
+      username: "services@whitesmith.co",
+      team_name: "Whitesmith Lda",
+      ipa: PRODUCTION_IPA_PATH,
+      skip_submission: true,
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  lane :beta do |options|
+    beta_build bump: options[:bump]
+    beta_upload_latest_to_hockey notify: options[:notify]
+  end
+
+  lane :release do |options|
+    build_appstore
+    upload_latest_to_appstore
+  end
+
+  lane :test do
+    run_tests(
+    	scheme: "BuildTrackerTests",
+    	devices: ["iPhone 8 (11.4)"],
+    	test_without_building: false,
+    	xcargs: { 
+        TRAVIS_TOKEN: ENV['TRAVIS_TOKEN'],
+      }
+    )
+  end
+
+end
