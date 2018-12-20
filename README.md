@@ -2,6 +2,8 @@
 
 Just needed an app to see all Travis CI builds and be able to cancel/restart them.
 
+(See Travis CI builds in the mobile browser is just too burden for me 🤷‍♂️).
+
 ## Requirements
 
 * iOS 11.0+
