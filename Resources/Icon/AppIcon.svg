@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>AppIcon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="1024" height="1024"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="AppIcon" fill="#D8D8D8" xlink:href="#path-1"></use>
+        <polygon id="Rectangle-Copy-7" fill="#76E100" mask="url(#mask-2)" points="1472.04524 -216.656313 1643.94663 -126.337763 912.733922 1232.57812 740.832536 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-6" fill="#049D27" mask="url(#mask-2)" points="1277.35488 -216.656313 1449.25627 -126.337763 718.04356 1232.57812 546.142174 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-5" fill="#5EC642" mask="url(#mask-2)" points="1082.66452 -216.656313 1254.56591 -126.337763 523.353198 1232.57812 351.451811 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-4" fill="#44B05C" mask="url(#mask-2)" points="887.974158 -216.656313 1059.87554 -126.337763 328.662836 1232.57812 156.761449 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-3" fill="#409362" mask="url(#mask-2)" points="693.283796 -216.656313 865.185182 -126.337763 133.972473 1232.57812 -37.9289132 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-2" fill="#87D8BF" mask="url(#mask-2)" points="498.593434 -216.656313 670.49482 -126.337763 -60.7178888 1232.57812 -232.619275 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-1" fill="#0400CC" mask="url(#mask-2)" points="303.903071 -216.656313 475.804458 -126.337763 -255.408251 1232.57812 -427.309638 1142.25958"></polygon>
+        <polygon id="Rectangle-Copy-0" fill="#A300FF" mask="url(#mask-2)" points="109.212709 -216.656313 281.114096 -126.337763 -450.098613 1232.57812 -622 1142.25958"></polygon>
+    </g>
+</svg>
