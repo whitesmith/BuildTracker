@@ -63,7 +63,8 @@ class JobsViewController: UITableViewController {
         switch job.state.lowercased() {
         case "passed":
             cell.contentView.backgroundColor = .green
-        case "failed":
+        case "failed",
+             "errored":
             cell.contentView.backgroundColor = .red
         case "started":
             cell.contentView.backgroundColor = .yellow
@@ -80,7 +81,7 @@ class JobsViewController: UITableViewController {
         let job = jobs[indexPath.row]
         let alertController = UIAlertController(title: "Operations", message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        if job.state.lowercased() == "failed" || job.state.lowercased() == "canceled" {
+        if job.state.lowercased() == "failed" || job.state.lowercased() == "canceled" || job.state.lowercased() == "errored" {
             alertController.addAction(UIAlertAction(title: "Restart Job", style: .default, handler: { [weak self] _ in
                 self?.travisService.restart(job: job).done {
                     // Success
