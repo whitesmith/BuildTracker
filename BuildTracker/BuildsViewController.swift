@@ -52,15 +52,15 @@ class BuildsViewController: UITableViewController {
         cell.textLabel?.text = "\(build.repository.name): \(build.eventType)@\(build.branch.name) (\(build.commit.message))"
         switch build.state.lowercased() {
         case "passed":
-            cell.contentView.backgroundColor = .green
+            cell.contentView.backgroundColor = .systemGreen
         case "failed":
-            cell.contentView.backgroundColor = .red
+            cell.contentView.backgroundColor = .systemRed
         case "started":
-            cell.contentView.backgroundColor = .yellow
+            cell.contentView.backgroundColor = .systemYellow
         case "created":
-            cell.contentView.backgroundColor = .orange
+            cell.contentView.backgroundColor = .systemOrange
         default:
-            cell.contentView.backgroundColor = .lightGray
+            cell.contentView.backgroundColor = .systemGray
         }
         return cell
     }

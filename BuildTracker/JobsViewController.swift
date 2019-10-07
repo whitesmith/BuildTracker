@@ -62,17 +62,17 @@ class JobsViewController: UITableViewController {
         cell.textLabel?.text = "\(job.number): \(job.state)"
         switch job.state.lowercased() {
         case "passed":
-            cell.contentView.backgroundColor = .green
+            cell.contentView.backgroundColor = .systemGreen
         case "failed",
              "errored":
-            cell.contentView.backgroundColor = .red
+            cell.contentView.backgroundColor = .systemRed
         case "started":
-            cell.contentView.backgroundColor = .yellow
+            cell.contentView.backgroundColor = .systemYellow
         case "created",
              "received":
-            cell.contentView.backgroundColor = .orange
+            cell.contentView.backgroundColor = .systemOrange
         default:
-            cell.contentView.backgroundColor = .lightGray
+            cell.contentView.backgroundColor = .systemGray
         }
         return cell
     }
